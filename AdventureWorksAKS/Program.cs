@@ -31,11 +31,6 @@ namespace AdventureWorksAKS
                   // Call other providers here and call AddKeyPerFile last.
                   if (env.IsDevelopment())
                   {
-                      // For more details on using the user secret store 
-                      // see http://go.microsoft.com/fwlink/?LinkID=532709
-
-                      // config.AddUserSecrets<Startup>();
-
                       // Use the following config builder method to test local file secrets
                       // You must create a folder called '/kvmnt' at the root of the web project
                       // Create a file for each of your secrest, using key name as the secret file name (no file suffix)
@@ -44,7 +39,7 @@ namespace AdventureWorksAKS
 
                       // config.AddKeyPerFile($"{env.ContentRootPath}/kvmnt", false);
                    
-                      // config.AddJsonFile("localsecrets.json", optional: false, reloadOnChange: true);
+                      config.AddJsonFile("localsecrets.json", optional: false, reloadOnChange: true);
                   }
                   else
                   {
@@ -52,10 +47,5 @@ namespace AdventureWorksAKS
                   }
               })
               .UseStartup<Startup>();
-
-
-        //public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .UseStartup<Startup>();
     }
 }

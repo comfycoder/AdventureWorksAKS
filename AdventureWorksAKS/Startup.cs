@@ -43,16 +43,16 @@ namespace AdventureWorksAKS
                     options.SerializerSettings.Formatting = Formatting.Indented;
                 });
 
-            //var sqlConnection = GetSqlConnectionAsync();
+            var sqlConnection = GetSqlConnectionAsync();
 
-            //services.AddDbContext<AdventureWorksContext>(options =>
-            //    options.UseSqlServer(sqlConnection,
-            //    sqlServerOptionsAction: sqlServerOptions =>
-            //    {
-            //        sqlServerOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-            //        sqlServerOptions.UseRowNumberForPaging();
-            //    })
-            //);
+            services.AddDbContext<AdventureWorksContext>(options =>
+                options.UseSqlServer(sqlConnection,
+                sqlServerOptionsAction: sqlServerOptions =>
+                {
+                    sqlServerOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                    sqlServerOptions.UseRowNumberForPaging();
+                })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,52 +96,52 @@ namespace AdventureWorksAKS
             });
         }
 
-        //public SqlConnection GetSqlConnectionAsync()
-        //{
-        //    string tenantId = Configuration["TenantId"];
-        //    string clientId = Configuration["ClientId"];
-        //    string clientSecret = Configuration["ClientSecret"];
-        //    string dbServer = Configuration["DbServerName"];
-        //    string dbName = Configuration["DbName"];
+        public SqlConnection GetSqlConnectionAsync()
+        {
+            string tenantId = Configuration["TenantId"];
+            string clientId = Configuration["ClientId"];
+            string clientSecret = Configuration["ClientSecret"];
+            string dbServer = Configuration["DbServerName"];
+            string dbName = Configuration["DbName"];
 
-        //    var authority = string.Format("https://login.windows.net/{0}", tenantId);
-        //    var resource = "https://database.windows.net/";
-        //    var scope = "";
+            var authority = string.Format("https://login.windows.net/{0}", tenantId);
+            var resource = "https://database.windows.net/";
+            var scope = "";
 
-        //    var builder = new SqlConnectionStringBuilder();
-        //    builder["Data Source"] = $"{dbServer}.database.windows.net";
-        //    builder["Initial Catalog"] = dbName;
-        //    builder["Connect Timeout"] = 30;
-        //    builder["Persist Security Info"] = false;
-        //    builder["TrustServerCertificate"] = false;
-        //    builder["Encrypt"] = true;
-        //    builder["MultipleActiveResultSets"] = false;
+            var builder = new SqlConnectionStringBuilder();
+            builder["Data Source"] = $"{dbServer}.database.windows.net";
+            builder["Initial Catalog"] = dbName;
+            builder["Connect Timeout"] = 30;
+            builder["Persist Security Info"] = false;
+            builder["TrustServerCertificate"] = false;
+            builder["Encrypt"] = true;
+            builder["MultipleActiveResultSets"] = false;
 
-        //    var con = new SqlConnection(builder.ToString());
+            var con = new SqlConnection(builder.ToString());
 
-        //    var token = GetAccessToken(clientId, clientSecret, authority, resource, scope);
+            var token = GetAccessToken(clientId, clientSecret, authority, resource, scope);
 
-        //    con.AccessToken = token;
+            con.AccessToken = token;
 
-        //    return con;
-        //}
+            return con;
+        }
 
-        //public static string GetAccessToken(string clientId, string clientSecret, string authority, string resource, string scope)
-        //{
+        public static string GetAccessToken(string clientId, string clientSecret, string authority, string resource, string scope)
+        {
 
-        //    var authContext = new AuthenticationContext(authority, TokenCache.DefaultShared);
+            var authContext = new AuthenticationContext(authority, TokenCache.DefaultShared);
 
-        //    var clientCred = new ClientCredential(clientId, clientSecret);
+            var clientCred = new ClientCredential(clientId, clientSecret);
 
-        //    var result = authContext.AcquireTokenAsync(resource, clientCred).GetAwaiter().GetResult();
+            var result = authContext.AcquireTokenAsync(resource, clientCred).GetAwaiter().GetResult();
 
-        //    if (result == null)
-        //    {
-        //        throw new InvalidOperationException("Could not get token");
-        //    }
+            if (result == null)
+            {
+                throw new InvalidOperationException("Could not get token");
+            }
 
-        //    return result.AccessToken;
-        //}
+            return result.AccessToken;
+        }
     }
 
 }

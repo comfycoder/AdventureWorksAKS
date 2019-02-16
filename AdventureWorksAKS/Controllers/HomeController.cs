@@ -10,14 +10,18 @@ namespace AdventureWorksAKS.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly AdventureWorksContext _dbContext;
+
+        public HomeController(AdventureWorksContext dbContext)
         {
-            return View();
+            _dbContext = dbContext;
         }
 
-        public IActionResult Privacy()
+        public IActionResult Index()
         {
-            return View();
+            var customers = _dbContext.Customer.Take(50).ToList();
+
+            return View(customers);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
